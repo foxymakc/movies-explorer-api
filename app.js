@@ -5,9 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
-const { auth } = require('./middlewares/auth');
 const router = require('./routes/index');
-const ErrorNotFound = require('./errors/ErrorNotFound');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
@@ -38,10 +36,6 @@ app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');
   }, 0);
-});
-
-app.use('*', auth, () => {
-  throw new ErrorNotFound('Запрашиваемый ресурс не найден');
 });
 
 app.use(errorLogger);
