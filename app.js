@@ -5,13 +5,16 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+const helmet = require('helmet');
 const router = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { errorHandler } = require('./assistants/errorHandler');
+const limiter = require('./assistants/limiter');
 
 const { PORT = 3000 } = process.env;
 const app = express();
+app.use(helmet());
 
-// eslint-disable-next-line no-unused-vars
 const corsOptions = {
   origin: ['http://localhost:3000'],
   credentials: true,
@@ -38,21 +41,12 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
+app.use(limiter);
 app.use(errorLogger);
 app.use(errors());
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res
-    .status(statusCode)
-    .send({
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message,
-    });
-  next();
-});
+app.use(errorHandler);
 
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-template-curly-in-string, no-console
+  // eslint-disable-next-line no-console
   console.log(`App listening on port ${PORT}`);
 });

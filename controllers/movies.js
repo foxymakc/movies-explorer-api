@@ -43,7 +43,7 @@ const createMovie = (req, res, next) => {
     .then((movie) => res.send({ data: movie }))
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(new ErrorBadRequest('Переданы некорректные данные при создании карточки'));
+        next(new ErrorBadRequest('Переданы некорректные данные при создании фильма'));
       } else {
         next(new ErrorDefault('Ошибка по умолчанию.'));
       }
@@ -53,7 +53,7 @@ const createMovie = (req, res, next) => {
 const deleteMovie = (req, res, next) => {
   Movie.findById(req.params.movieId)
     .orFail(() => {
-      throw new ErrorNotFound('Карточка не найдена');
+      throw new ErrorNotFound('Фильм не найден');
     })
     .then((movie) => {
       if (movie.owner.toString() !== req.user._id) {
