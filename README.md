@@ -15,9 +15,9 @@
 
 ## Публичный IP-адрес сервера
 
-
+130.193.42.180
 
 ## Домен сервера
 
-
+https://diplom.movies.nomoredomains.sbs 
 
