@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const cardSchema = new mongoose.Schema({
+const movieSchema = new mongoose.Schema({
   country: {
     type: String,
     require: true,
@@ -29,7 +29,7 @@ const cardSchema = new mongoose.Schema({
       message: 'Введён некорректный URL',
     },
   },
-  trailer: {
+  trailerLink: {
     type: String,
     require: true,
     validate: {
@@ -66,4 +66,4 @@ const cardSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('card', cardSchema);
+module.exports = mongoose.model('movie', movieSchema);
