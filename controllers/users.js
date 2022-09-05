@@ -49,9 +49,11 @@ const updateUser = (req, res, next) => {
     .orFail(() => {
       throw new ErrorNotFound('Пользователь не найден');
     })
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send({ user }))
     .catch((err) => {
-      if (err.name === 'CastError' || err.name === 'ValidationError') {
+      if (err.name === 'ConflictError' || err.code === 11000) {
+        next(new ErrorConflict('Редактирование данных другого пользователя невозможно'));
+      } else if (err.name === 'ValidationError') {
         next(new ErrorBadRequest('Переданы некорректные данные при обновлении профиля'));
       } else {
         next(err);

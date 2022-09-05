@@ -51,8 +51,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   movieId: {
-    type: Number,
-    ref: 'movie',
+    type: String,
     required: true,
     unique: true,
   },

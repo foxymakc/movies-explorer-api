@@ -1,13 +1,19 @@
 const { celebrate, Joi } = require('celebrate');
 const mongoose = require('mongoose');
+const validator = require('validator');
 
-const listConditions = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,}\.[a-z0-9]{1,10}\b([-a-z0-9-._~:/?#@!$&'()*+,;=]*)/;
-
-const customValidation = (value) => {
+const customValidationId = (value) => {
   if (!mongoose.isValidObjectId(value)) {
     throw new Error('Не правльный формат id');
   }
   return value;
+};
+const customValidateUrl = (url) => {
+  const result = validator.isURL(url);
+  if (!result) {
+    throw new Error('Не правльный формат URL');
+  }
+  return url;
 };
 
 const loginValidation = celebrate({
@@ -27,7 +33,7 @@ const createUserValidation = celebrate({
 
 const idValidation = celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().alphanum().custom(customValidation),
+    movieId: Joi.string().alphanum().custom(customValidationId),
   }),
 });
 
@@ -45,9 +51,9 @@ const createMoviesValidation = celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required().pattern(listConditions),
-    trailerLink: Joi.string().required().pattern(listConditions),
-    thumbnail: Joi.string().required().pattern(listConditions),
+    image: Joi.string().required().custom(customValidateUrl),
+    trailerLink: Joi.string().required().custom(customValidateUrl),
+    thumbnail: Joi.string().required().custom(customValidateUrl),
     movieId: Joi.number().integer().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),

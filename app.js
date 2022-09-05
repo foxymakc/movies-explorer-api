@@ -6,12 +6,12 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
+const { NOW_PORT, NOW_MONG_URL } = require('./config');
 const router = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./assistants/errorHandler');
 const limiter = require('./assistants/limiter');
 
-const { PORT = 3000 } = process.env;
 const app = express();
 app.use(helmet());
 
@@ -24,7 +24,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
-mongoose.connect('mongodb://localhost:27017/moviesdb', {
+mongoose.connect(NOW_MONG_URL, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
   autoIndex: true,
@@ -33,6 +33,7 @@ mongoose.connect('mongodb://localhost:27017/moviesdb', {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
+app.use(limiter);
 app.use(router);
 
 app.get('/crash-test', () => {
@@ -41,12 +42,8 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.use(limiter);
 app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`App listening on port ${PORT}`);
-});
+app.listen(NOW_PORT);
