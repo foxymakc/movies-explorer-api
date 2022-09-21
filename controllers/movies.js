@@ -5,7 +5,7 @@ const ErrorDefault = require('../errors/ErrorDefault');
 const ErrorForbidden = require('../errors/ErrorForbidden');
 
 const getMovies = (req, res, next) => {
-  Movie.find({})
+  Movie.find({ owner: req.user._id })
     .then((movies) => res.send({ data: movies }))
     .catch(next);
 };
@@ -26,7 +26,7 @@ const createMovie = (req, res, next) => {
   } = req.body;
   const owner = req.user._id;
 
-  Movie.create({
+  return Movie.create({
     country,
     director,
     duration,
@@ -40,6 +40,7 @@ const createMovie = (req, res, next) => {
     nameEN,
     owner,
   })
+
     .then((movie) => res.send({ data: movie }))
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
