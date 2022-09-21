@@ -16,7 +16,7 @@ const app = express();
 app.use(helmet());
 
 const corsOptions = {
-  origin: ['https://diplom.movies.nomoredomains.sbs/', 'http://localhost:3000'],
+  origin: ['http://localhost:3000', 'https://diplom.movies-explorer.nomorepartiesxyz.ru/', 'http://diplom.movies-explorer.nomorepartiesxyz.ru/'],
   credentials: true,
   optionsSuccessStatus: 200,
 };
