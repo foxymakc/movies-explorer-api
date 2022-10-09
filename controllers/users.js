@@ -72,23 +72,9 @@ const login = (req, res, next) => {
         { expiresIn: '7d' },
       );
 
-      res.cookie('jwt', token, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-      })
-        .send({ _id: user._id, message: 'Авторизация прошла успешно' });
+      res.send({ _id: user._id, token, message: 'Авторизация прошла успешно' });
     })
     .catch(next);
-};
-
-const logout = (req, res) => {
-  res.clearCookie('jwt', {
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true,
-  }).send();
 };
 
 module.exports = {
@@ -96,5 +82,4 @@ module.exports = {
   updateUser,
   login,
   getInfoUser,
-  logout,
 };
