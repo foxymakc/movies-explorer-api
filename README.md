@@ -1,5 +1,5 @@
 # movies-explorer-api
-1-я часть (back-end) дипломного проекта [Яндекс.Практикум](https://praktikum.yandex.ru/)
+1-я часть (backend) дипломного проекта [Яндекс.Практикум](https://praktikum.yandex.ru/)
 по специальности Веб-разработчик.
 
 ## Краткое описание:
